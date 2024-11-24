@@ -17,7 +17,6 @@ LIMIT 1
 """)
 
 latest_entry = cursor.fetchone()
-print(latest_entry)
 entry_id, entry_date, stockNews = latest_entry
 data = json.loads(stockNews)
 

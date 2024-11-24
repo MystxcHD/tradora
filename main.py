@@ -16,7 +16,8 @@ def returnArticle():
     for i, link in enumerate(url):
         result.append(f"URL {i+1}: {link}")
 
-    return "\n".join(result)
+    print("Success")
+    return "\n\n".join(result)
 
 content = returnArticle()
 e_alert("Daily Newsletter", content, "siva.dasaka75@gmail.com")

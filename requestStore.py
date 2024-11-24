@@ -32,6 +32,7 @@ params = {
     "interval": "day",
     "published_on": yesterday_date,
     "sort": "total_documents",
+    "language": "en",
     "sort_order": "desc",
 }
 
