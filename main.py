@@ -17,7 +17,19 @@ def returnArticle():
         result.append(f"URL {i+1}: {link}")
 
     print("Success")
-    return "\n\n".join(result)
+    return "<br><br>".join(result)
+
 
 content = returnArticle()
-e_alert("Daily Newsletter", content, "siva.dasaka75@gmail.com")
+
+with open("email.html", "r", encoding="utf-8") as file:
+    html_template = file.read()
+
+html_content = html_template.replace("{body}", content)
+
+
+e_alert(
+    subject="Daily Newsletter",
+    html_content=html_content,
+    to="siva.dasaka75@gmail.com"
+)
