@@ -2,31 +2,43 @@ from clean import *
 from email_func import e_alert
 
 def returnArticle():
-    result = []
+    titles_list = []
+    description_list = []
+    snippet_list = []
+    url_list = []
 
     for i, title in enumerate(titles):
-        result.append(f"Title {i+1}: {title}")
+        titles_list.append(title)
 
     for i, desc in enumerate(description):
-        result.append(f"Description {i+1}: {desc}")
+        description_list.append(desc)
 
     for i, snip in enumerate(snippet):
-        result.append(f"Snippet {i+1}: {snip}")
+        snippet_list.append(snip)
 
     for i, link in enumerate(url):
-        result.append(f"URL {i+1}: {link}")
+        url_list.append(link)
 
     print("Success")
-    return "<br><br>".join(result)
+    return titles_list, description_list, snippet_list, url_list
 
+titles_list, description_list, snippet_list, url_list = returnArticle()
 
-content = returnArticle()
+title_content = "<br><br>".join(titles_list)
+description_content = "<br><br>".join(description_list)
+
 
 with open("email.html", "r", encoding="utf-8") as file:
-    html_template = file.read()
+    html_content = file.read()
 
-html_content = html_template.replace("{body}", content)
 
+placeholders = {
+    "{body}": description_content,
+    "{titles}": title_content,
+}
+
+for placeholder, value in placeholders.items():
+    html_content = html_content.replace(placeholder, value)
 
 e_alert(
     subject="Daily Newsletter",
