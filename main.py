@@ -51,7 +51,7 @@ def returnStockArticle():
     for i, link in enumerate(stock_urls):
         url_list.append(link)
 
-    print("Success")
+    print("Success - Stocks")
     return titles_list, description_list,  authors_list, url_list
 
 def returnCryptoArticle():
@@ -76,7 +76,7 @@ def returnCryptoArticle():
     for i, link in enumerate(crypto_urls):
         url_list.append(link)
 
-    print("Success")
+    print("Success - Crypto")
     return titles_list, description_list,  authors_list, url_list
 
 s_titles_list, s_description_list,  s_authors_list, s_url_list = returnStockArticle()
