@@ -26,42 +26,54 @@ yesterday = datetime.now() - timedelta(days=1)
 yesterday_date = yesterday.strftime("%Y-%m-%d")
 current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-# Call the Stock News API
-
-newsapi = NewsApiClient(api_key="a14ac5366922446488cf43d42dd1e18b")
-all_articles = newsapi.get_everything(q="stock market",
-                                      from_param=yesterday_date,
-                                      language="en",
-                                      sort_by="relevancy")
-
-if "articles" in all_articles:
-    stock_data = json.dumps(all_articles["articles"][:3])
-else:
-    stock_data = json.dumps({"error": "Failed to fetch crypto articles"})
+# Function to filter and get valid articles
+def get_valid_articles(articles, max_count=3):
+    valid_articles = []
     
-# Call the Crypto News API
+    for article in articles:
+        title = article.get("title")
+        description = article.get("description")
+        author = article.get("author")
+        url = article.get("url")
+        
+        # Ensure no None values exist
+        if title and description and author and url:
+            valid_articles.append(article)
+        
+        # Stop when we reach the required count
+        if len(valid_articles) == max_count:
+            break
+    
+    return valid_articles
 
+# Fetch Stock News
 newsapi = NewsApiClient(api_key="a14ac5366922446488cf43d42dd1e18b")
-all_articles = newsapi.get_everything(q="cryptocurrency",
-                                      from_param=yesterday_date,
-                                      language="en",
-                                      sort_by="relevancy")
+all_stock_articles = newsapi.get_everything(q="stock market",
+                                            from_param=yesterday_date,
+                                            language="en",
+                                            sort_by="relevancy")
 
-if "articles" in all_articles:
-    top_3_crypto = json.dumps(all_articles["articles"][:3])
-else:
-    top_3_crypto = json.dumps({"error": "Failed to fetch crypto articles"})
+stock_articles = get_valid_articles(all_stock_articles.get("articles", []))
 
-# Store the calls in the db
+# Fetch Crypto News
+all_crypto_articles = newsapi.get_everything(q="cryptocurrency",
+                                             from_param=yesterday_date,
+                                             language="en",
+                                             sort_by="relevancy")
 
+crypto_articles = get_valid_articles(all_crypto_articles.get("articles", []))
+
+# Convert to JSON format for storage
+stock_data = json.dumps(stock_articles)
+crypto_data = json.dumps(crypto_articles)
+
+# Store in database
 cursor.execute("""
 INSERT INTO stockNews (date, stockNews_api_call, cryptoNews_api_call)
 VALUES (?, ?, ?)
-""", (current_date, stock_data, top_3_crypto))
+""", (current_date, stock_data, crypto_data))
 
 conn.commit()
-
-# Close the connection
 conn.close()
 
 # CLEAN
