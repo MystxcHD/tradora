@@ -29,6 +29,16 @@ def e_alert(subject, html_content=None, html_file_path=None, to=None):
   server.send_message(msg)
   server.quit()
 
+def get_users():
+    conn = sql.connect("users.db")
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT email FROM users")
+    subscribers = [row[0] for row in cursor.fetchall()]
+    
+    conn.close()
+    return subscribers
+
 def returnStockArticle():
     """
     Returns 4 lists containing the title, description,
@@ -79,6 +89,8 @@ def returnCryptoArticle():
     print("Success - Crypto")
     return titles_list, description_list,  authors_list, url_list
 
+# At a Glance News
+
 s_titles_list, s_description_list,  s_authors_list, s_url_list = returnStockArticle()
 c_titles_list, c_description_list,  c_authors_list, c_url_list = returnCryptoArticle()
 
@@ -104,20 +116,30 @@ for title, description, author, url in zip(c_titles_list, c_description_list,  c
     </div>
     """
 
-with open("email.html", "r", encoding="utf-8") as file:
-    html_content = file.read()
 
-placeholders = {
-    "{market_news_blocks}": market_news_blocks,
-    "{crypto_news_blocks}": crypto_news_blocks,
-}
+def send_newsletter():
+    with open("email.html", "r", encoding="utf-8") as file:
+        html_content = file.read()
 
-for placeholder, value in placeholders.items():
-    html_content = html_content.replace(placeholder, value)
+    current_date = datetime.now().strftime("%B %d, %Y at %I:%M %p")
+    date_insertion = f"""<div style="text-align: center; font-size: 12px; color: #555; margin-top: 5px"><p>{current_date}</p></div>"""
 
-e_alert(
-    subject="Daily Newsletter",
-    html_content=html_content,
-    to="siva.dasaka75@gmail.com"
-)
+    placeholders = {
+        "{date_insertion}": date_insertion,
+        "{market_news_blocks}": market_news_blocks,
+        "{crypto_news_blocks}": crypto_news_blocks,
+    }
 
+    for placeholder, value in placeholders.items():
+        html_content = html_content.replace(placeholder, value)
+
+    subscribers = get_users()
+    
+    for email in subscribers:
+        try:
+            e_alert(subject="Daily Newsletter", html_content=html_content, to=email)
+            print(f"Email sent to {email}")
+        except Exception as e:
+            print(f"Failed to send email to {email}: {e}")
+
+send_newsletter()

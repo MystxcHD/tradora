@@ -32,9 +32,10 @@
                 max-width: 600px;
                 margin: 0 auto;
                 background: #ffffff;
-                padding: 20px;
+                padding: 30px;
                 border-radius: 10px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                border: 1px solid #ddd;
             }
             .header {
                 text-align: center;
@@ -52,8 +53,10 @@
             .footer {
                 text-align: center;
                 font-size: 12px;
-                color: #aaa;
-                margin-top: 20px;
+                color: #777;
+                margin-top: 30px;
+                border-top: 1px solid #eee;
+                padding-top: 15px;
             }
             .title-block {
                 background: #f9f9f9;
@@ -91,13 +94,14 @@
                 <img src="https://i.postimg.cc/QCrbX4SV/tradora-banner-transparent.png" alt="Tradora Logo" width="200">
             </div>
             <div class="content">
+                {date_insertion}
                 <h2>Market News at a Glance</h2>
                 {market_news_blocks}
                 <h2>Crypto News at a Glance</h2>
                 {crypto_news_blocks}
             </div>
             <div class="footer">
-                <p>This is, by no means, financial advice. Tradora is not responsible for any losses resulting from our information.</p>
+                <p><strong>Tradora provides market and cryptocurrency news for informational purposes only. This is not financial advice. Please do your own research before making any investment decisions.</strong></p>
             </div>
         </div>
     </body>

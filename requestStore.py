@@ -26,7 +26,7 @@ yesterday = datetime.now() - timedelta(days=1)
 yesterday_date = yesterday.strftime("%Y-%m-%d")
 current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-# Function to filter and get valid articles
+
 def get_valid_articles(articles, max_count=3):
     valid_articles = []
     
@@ -67,7 +67,7 @@ crypto_articles = get_valid_articles(all_crypto_articles.get("articles", []))
 stock_data = json.dumps(stock_articles)
 crypto_data = json.dumps(crypto_articles)
 
-# Store in database
+# Store in DB
 cursor.execute("""
 INSERT INTO stockNews (date, stockNews_api_call, cryptoNews_api_call)
 VALUES (?, ?, ?)
@@ -78,7 +78,7 @@ conn.close()
 
 # CLEAN
 
-# Connect and init db
+# Connect and init DB
 
 conn = sql.connect("stockNews.db")
 cursor = conn.cursor()
