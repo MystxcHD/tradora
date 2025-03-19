@@ -19,9 +19,9 @@ def e_alert(subject, html_content=None, html_file_path=None, to=None):
   msg["subject"] = subject
   msg["to"] = to
 
-  user = "ta6750080@gmail.com"
+  user = "tradora.newsletter@gmail.com"
   msg["from"] = user
-  letters = "pmnqfjdajuajpunk"
+  letters = "ggevkxouwqeylrte"
 
   server = smtplib.SMTP("smtp.gmail.com", 587)
   server.starttls()
